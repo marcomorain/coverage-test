@@ -15,12 +15,13 @@ jobs:
       - checkout
       - run: lein deps
       - run: lein test
-
-      # You can set it in your CI environment variables. CODECOV_TOKEN="5a20f422-b19d-4a49-918b-0ba56eab85e3"
-      # - run: lein cloverage --codecov
+      - run:
+          command: lein cloverage #--codecov
+          when: always
+      - store_artifacts:
+          path: target/coverage
+          when: always
 
       # - codecov/upload:
       #     file: target/coverage/codecov.json
       #     flags: server
-
-      # - store_artifacts: {path: target/coverage}
