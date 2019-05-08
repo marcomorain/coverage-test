@@ -15,4 +15,4 @@
            (c/foo-bar-baz [1 2 3])))))
 
 (deftest ackerman-works
-  (is (= 2 (c/ack 0 1))))
+  (is (= 29 (c/ack 3 2))))
