@@ -8,20 +8,20 @@ jobs:
     docker:
       - image: circleci/clojure:lein-2.7.1
 
-    #environment:
-    #  CODECOV_TOKEN: 5a20f422-b19d-4a49-918b-0ba56eab85e3
+    environment:
+      CODECOV_TOKEN: 5a20f422-b19d-4a49-918b-0ba56eab85e3
 
     steps:
       - checkout
       - run: lein deps
       - run: lein test
       - run:
-          command: lein cloverage #--codecov
+          command: lein cloverage --codecov
           when: always
       - store_artifacts:
           path: target/coverage
           when: always
 
-      # - codecov/upload:
-      #     file: target/coverage/codecov.json
-      #     flags: server
+      - codecov/upload:
+          file: target/coverage/codecov.json
+          #flags: server
