@@ -1,16 +1,9 @@
 version: 2.1
 
-orbs:
-  codecov: codecov/codecov@1.0.4
-
 jobs:
   build:
     docker:
       - image: circleci/clojure:lein-2.7.1
-
-    environment:
-      CODECOV_TOKEN: 5a20f422-b19d-4a49-918b-0ba56eab85e3
-
     steps:
       - checkout
       - run: lein deps
@@ -21,7 +14,34 @@ jobs:
       - store_artifacts:
           path: target/coverage
           when: always
+      - persist_to_workspace:
+          root: .
+          paths: [.]
 
-      - codecov/upload:
-          file: target/coverage/codecov.json
-          #flags: server
+  plugin_test:
+    docker:
+      - image: plugins/codecov
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          command: drone-codecov
+          #environmenmt:
+          environment:
+            PLUGIN_TOKEN: 5a20f422-b19d-4a49-918b-0ba56eab85e3
+            PLUGIN_FILES: target/coverage/codecov.json
+            PLUGIN_FLAGS: server
+            DRONE_REPO: << pipeline.project.git_url >>
+            DRONE_BRANCH: << pipeline.git.branch >>
+            DRONE_COMMIT: << pipeline.git.revision >>
+            DRONE_TAG: << pipeline.git.tag >>
+            DRONE_BUILD_NUMBER: << pipeline.number >>
+            #DRONE_BUILD_LINK: from env var
+            #DRONE_PULL_REQUEST: from env var
+
+workflows:
+  wf:
+    jobs:
+      - build
+      - plugin_test:
+          requires: [build]
