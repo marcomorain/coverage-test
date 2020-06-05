@@ -7,4 +7,5 @@ steps:
 - name: Clojure
   image: circleci/clojure:openjdk-8-lein-2.9.3
   commands:
+    - mkdir -p /drone/src/target/default/classes
     - lein cloverage --codecov
