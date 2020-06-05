@@ -1,15 +1,27 @@
----
 kind: pipeline
 type: docker
 name: default
 
 steps:
-- name: Clojure
-  image: circleci/clojure:openjdk-8-lein-2.9.3
+- name: waiter
+  image: golang
   commands:
-    - echo $USER
-    - echo $HOME
-    - env
-    - pwd
-    - mkdir -p /drone/src/target/default/classes
-    - lein cloverage --codecov
+  - date
+  - ./loop.sh
+  - date
+
+- name: chef
+  image: golang
+  commands:
+  - date
+  - sleep 17
+  - echo 'foo bar' > sleep.txt
+  - date
+
+- name: desert
+  image: golang
+  commands:
+  - cat sleep.txt
+  depends_on:
+  - chef
+  - waiter
