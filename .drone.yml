@@ -4,14 +4,9 @@ type: docker
 name: default
 
 steps:
-- name: backend
-  image: golang
+- name: Clojure
+  image: circleci/clojure:openjdk-8-lein-2.9.3
   commands:
-  - go build
-  - go test
-
-- name: frontend
-  image: node
-  commands:
-  - npm install
-  - npm run test
+    - lein deps
+    - lein test
+    - lein cloverage --codecov
