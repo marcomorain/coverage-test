@@ -7,6 +7,4 @@ steps:
 - name: Clojure
   image: circleci/clojure:openjdk-8-lein-2.9.3
   commands:
-    - lein deps
-    - lein test
     - lein cloverage --codecov
